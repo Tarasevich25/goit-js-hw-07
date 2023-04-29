@@ -20,32 +20,34 @@ function createImgCard(galleryItems) {
     data-sourse = "${original}"
     alt = "${description}"
     width = 100%>
+    </img>
     </a>
     </div>`;
     })
     .join("");
 }
 
-function onImgOriginalCard(event) {
+function onImgOriginalCard(event, preview, description) {
   event.preventDefault();
   if (!event.target.classList.contains("gallery__image")) {
     return;
   }
-  console.log(event.target);
-
-  const instance = basicLightbox.create(
-    `<img src="${event.target.dataset.source}" width="800" height="600">`
-  );
-  {
-    onShow: () => document.addEventListener("keydown", onCloseModal);
-    onClose: () => document.removeEventListener("keydown", onCloseModal);
-  }
-
-  instance.show();
 
   function onCloseModal(event) {
     if (event.code === "Escape") {
       instance.close();
     }
   }
+
+  const markup = `
+<img width="1280 src="${preview}" alt="${description}" >
+`;
+
+  const instance = basicLightbox.create(markup, {
+    onShow: (instance) => window.addEventListener("keydown", onCloseModal),
+    onClose: (instance) => window.removeEventListener("keydown", onCloseModal)
+  });
+  instance.show();
+
+  // console.log(event.target);
 }
